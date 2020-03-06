@@ -1,0 +1,31 @@
+package com.ebookfrenzy.studentmarkdetails.database
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "marksheet_table")
+class DataEntity (
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "user_id")
+    var id: Int,
+
+    @ColumnInfo(name = "name")
+    val name: String,
+
+    @ColumnInfo(name = "tamil")
+    val tamil: String,
+
+    @ColumnInfo(name = "english")
+    val english: String,
+
+    @ColumnInfo(name = "science")
+    val science: String ,
+
+    @ColumnInfo(name = "social")
+    val social: String,
+
+    @ColumnInfo(name = "maths")
+    val maths: String
+)
