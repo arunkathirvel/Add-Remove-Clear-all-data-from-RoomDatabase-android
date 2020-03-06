@@ -1,0 +1,39 @@
+package com.ebookfrenzy.studentmarkdetails
+
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.ebookfrenzy.studentmarkdetails.database.DataEntity
+import kotlinx.android.synthetic.main.fragment_add.view.*
+
+class ListAdapter( var students: List<DataEntity>, val clickListener: (DataEntity) -> Unit) : RecyclerView.Adapter<ListAdapter.ViewHolder>(){
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
+        val itemView =LayoutInflater.from(parent.context).inflate(R.layout.fragment_add, parent, false)
+        return ViewHolder(itemView)
+    }
+
+    override fun getItemCount(): Int {
+        return students.size
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(students[position], clickListener)
+    }
+
+    class ViewHolder(itemView:View): RecyclerView.ViewHolder(itemView) {
+
+        fun bind(part: DataEntity, clickListener: (DataEntity) -> Unit) {
+            itemView.userid_tv_op.text = part.id.toString()
+            itemView.name_tv_op.text = part.name
+            itemView.tamil_tv_op.text = part.tamil
+            itemView.english_tv_op.text = part.english
+            itemView.maths_tv_op.text = part.maths
+            itemView.science_tv_op.text = part.science
+            itemView.social_tv_op.text = part.social
+            itemView.setOnClickListener {clickListener(part)}
+        }}
+
+}
