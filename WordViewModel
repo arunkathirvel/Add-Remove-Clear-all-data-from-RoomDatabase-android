@@ -1,0 +1,26 @@
+package com.ebookfrenzy.studentmarkdetails
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import com.ebookfrenzy.studentmarkdetails.database.DataEntity
+import com.ebookfrenzy.studentmarkdetails.database.MarkSheetRoomDatabase
+
+
+class WordViewModel(application: Application) : AndroidViewModel(application)  {
+
+    private val db: MarkSheetRoomDatabase = MarkSheetRoomDatabase.getDatabase(application)
+    internal val studentmarksheet: LiveData<List<DataEntity>> = db.dataDao().getAlphabetizedWords()
+
+    fun insert(marksheet:DataEntity){
+        db.dataDao().insert(marksheet)
+    }
+
+    fun deleteAll(){
+        db.dataDao().deleteAll()
+    }
+
+    fun deleteRecent(){
+        db.dataDao().deleteRecent()
+    }
+}
