@@ -1,0 +1,29 @@
+package com.ebookfrenzy.studentmarkdetails.database
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+
+@Database(entities = arrayOf(DataEntity::class), version = 2, exportSchema = false)
+public abstract class MarkSheetRoomDatabase:RoomDatabase()
+{
+    abstract fun dataDao(): DataDao
+
+    companion object{
+        @Volatile
+        private var INSTANCE: MarkSheetRoomDatabase? = null
+
+        fun getDatabase(context: Context): MarkSheetRoomDatabase {
+            val tempInstance = INSTANCE
+            if (tempInstance != null) {
+                return tempInstance}
+            synchronized(this) {
+                val instance = Room.databaseBuilder(context.applicationContext,MarkSheetRoomDatabase::class.java,
+                    "word_database").build()
+                INSTANCE = instance
+                return instance
+            }
+        }
+    }
+}
