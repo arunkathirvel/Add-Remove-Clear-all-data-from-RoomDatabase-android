@@ -1,0 +1,101 @@
+package com.ebookfrenzy.studentmarkdetails
+
+import android.os.Bundle
+import android.view.WindowManager
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ebookfrenzy.studentmarkdetails.database.DataEntity
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_add.*
+import org.jetbrains.anko.doAsync
+
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var model: WordViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_title)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        model = ViewModelProvider(this).get(WordViewModel::class.java)
+        val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        this.recyclerview.layoutManager = linearLayoutManager
+                model.studentmarksheet.observe( this, Observer { students -> recyclerview.adapter = ListAdapter(students, { partItem : DataEntity -> partItemClicked(partItem) })})
+        try {
+            add_bt.setOnClickListener {
+                doAsync {
+                     when {
+                        name_et.text.isEmpty() -> {
+                            name_et.error = "fill name"
+                        }
+                        tamil_et.text.isEmpty() -> {
+                            tamil_et.error = "fill tamil mark"
+                        }
+                        english_et.text.isEmpty() -> {
+                            english_et.error = "fill tamil mark"
+                        }
+                        maths_et.text.isEmpty() -> {
+                            maths_et.error = "fill tamil mark"
+                        }
+                        science_et.text.isEmpty() -> {
+                            science_et.error = "fill tamil mark"
+                        }
+                        social_et.text.isEmpty() -> {
+                            social_et.error = "fill tamil mark"
+                        }
+                        else -> {
+                            model.insert(
+                                DataEntity(
+                                    id = 0,
+                                    name = name_et.text.toString(),
+                                    tamil = tamil_et.text.toString(),
+                                    english = english_et.text.toString(),
+                                    science = science_et.text.toString(),
+                                    social = social_et.text.toString(),
+                                    maths = maths_et.text.toString() ))
+                        }
+                    }
+                }
+            }
+            remove_bt.setOnClickListener {
+
+                doAsync {
+                  model.deleteRecent()
+                }
+                Toast.makeText(this, "First row deleted ", Toast.LENGTH_LONG).show()
+            }
+
+            add_new_bt.setOnClickListener {
+                doAsync {
+                    model.deleteAll()
+                    name_et.text.clear()
+                    tamil_et.text.clear()
+                    english_et.text.clear()
+                    maths_et.text.clear()
+                    science_et.text.clear()
+                    social_et.text.clear()
+                }
+            }
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
+    }
+
+   private fun partItemClicked(partItem : DataEntity) {
+        Toast.makeText(this, "Clicked S.No: ${partItem.id}", Toast.LENGTH_LONG).show()
+    }
+
+}
+
+
+
+
